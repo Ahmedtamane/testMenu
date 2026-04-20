@@ -1,0 +1,22 @@
+﻿  main.cpp
+C:\Users\pc\Desktop\MainMenu\main.cpp(7,51): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\pc\Desktop\MainMenu\main.cpp(7,51): warning C4244:         with
+C:\Users\pc\Desktop\MainMenu\main.cpp(7,51): warning C4244:         [
+C:\Users\pc\Desktop\MainMenu\main.cpp(7,51): warning C4244:             T=unsigned int
+C:\Users\pc\Desktop\MainMenu\main.cpp(7,51): warning C4244:         ]
+C:\Users\pc\Desktop\MainMenu\main.cpp(7,31): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\pc\Desktop\MainMenu\main.cpp(7,31): warning C4244:         with
+C:\Users\pc\Desktop\MainMenu\main.cpp(7,31): warning C4244:         [
+C:\Users\pc\Desktop\MainMenu\main.cpp(7,31): warning C4244:             T=unsigned int
+C:\Users\pc\Desktop\MainMenu\main.cpp(7,31): warning C4244:         ]
+  MainMenu.cpp
+C:\Users\pc\Desktop\MainMenu\MainMenu.cpp(79,41): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+C:\Users\pc\Desktop\MainMenu\MainMenu.cpp(101,42): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+C:\Users\pc\Desktop\MainMenu\MainMenu.cpp(113,40): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+C:\Users\pc\Desktop\MainMenu\MainMenu.cpp(121,41): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+C:\Users\pc\Desktop\MainMenu\MainMenu.cpp(158,40): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+C:\Users\pc\Desktop\MainMenu\MainMenu.cpp(174,40): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+C:\Users\pc\Desktop\MainMenu\MainMenu.cpp(229,47): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+C:\Users\pc\Desktop\MainMenu\MainMenu.cpp(255,43): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+  Generating Code...
+  MainMenu.vcxproj -> C:\Users\pc\Desktop\MainMenu\Debug\MainMenu.exe
