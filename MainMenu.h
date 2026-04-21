@@ -14,7 +14,7 @@ class Menu
 {
 private:
     // Game state
-    enum GameState { MAIN_MENU, OPTIONS_MENU, LEVEL_SELECT };
+    enum GameState { MAIN_MENU, OPTIONS_MENU, LEVEL_SELECT, GAME_PLAY };
     GameState currentState;
 
     // Font
@@ -43,6 +43,16 @@ private:
     int selectedLevel;
     RectangleShape levelBackButton;
     Text levelBackText;
+
+    // Game play test elements
+    RectangleShape testPlayer;
+    View gameView;
+    float cameraX;
+    float testPlayerSpeed;
+    Vector2f testPlayerVelocity;
+    bool gameRunning;
+
+    float windowWidth, windowHeight;
 
     //level select images
     Texture levelTextures[3];
@@ -77,6 +87,9 @@ public:
     // Options menu functions
     void handleMouseOptions(RenderWindow& window, Event& event);
     void updateVolume();
+
+    void updateGame(float deltaTime);
+    void update(float deltaTime);
 };
 
 #endif

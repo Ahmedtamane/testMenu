@@ -4,6 +4,9 @@ using namespace sf;
 
 Menu::Menu(float width, float height)
 {
+    windowWidth = width;
+    windowHeight = height;
+       
     currentState = MAIN_MENU;
     isDraggingKnob = false;
     volumeLevel = 50.0f;
@@ -260,6 +263,18 @@ Menu::Menu(float width, float height)
     levelBackText.setOrigin(backTextRect.left + backTextRect.width / 2.0f,
         backTextRect.top + backTextRect.height / 2.0f);
     levelBackText.setPosition(width / 2, height * 3 / 4 + backHeight / 2);
+
+    // Game play setuup ( just a test )
+    testPlayer.setSize(Vector2f(50, 50));
+    testPlayer.setFillColor(Color::Green);
+    testPlayer.setPosition(width / 2, height - 100);
+    testPlayerSpeed = 300.f;
+    testPlayerVelocity = Vector2f(0, 0);
+    gameRunning = true;
+
+    gameView.reset(FloatRect(0, 0, width, height));
+    cameraX = 0;
+
 }
 
 
@@ -280,7 +295,33 @@ void Menu::updateVolume()
     music.setVolume(volumeLevel);
 }
 
+void Menu::updateGame(float deltaTime)
+{
+    if (!gameRunning) return;
 
+    testPlayer.move(testPlayerVelocity * deltaTime);
+
+    // Keep player inside window vertically
+    if (testPlayer.getPosition().y < 0)
+        testPlayer.setPosition(testPlayer.getPosition().x, 0);
+    if (testPlayer.getPosition().y > backgroundMain.getGlobalBounds().height - testPlayer.getSize().y)
+        testPlayer.setPosition(testPlayer.getPosition().x,
+            backgroundMain.getGlobalBounds().height - testPlayer.getSize().y);
+
+    cameraX = testPlayer.getPosition().x + testPlayer.getPosition().x / 2 - gameView.getSize().x / 2;
+    if (cameraX < 0) cameraX = 0; // i do this case to not go left side
+
+    gameView.setCenter(cameraX + gameView.getSize().x / 2, gameView.getSize().y / 2);
+
+}
+
+
+
+void Menu::update(float deltaTime)
+{
+    if (currentState == GAME_PLAY)
+        updateGame(deltaTime);
+}
 
 void Menu::moveUp()
 {
@@ -531,7 +572,21 @@ void Menu::handleInput(RenderWindow& window, Event& event)
                     sound.play();
                     selectedLevel = i + 1;
                     cout << "Starting LEVEL " << selectedLevel << "!" << endl;
-                    // Add your game launch code here
+                    
+                    if (i == 2)  // Level 3 index = 2
+                    {
+                        currentState = GAME_PLAY;
+
+                        
+                        // reset player position and camera 
+                        
+                        testPlayer.setPosition(windowWidth / 2, windowHeight - 100);
+                        testPlayerVelocity = Vector2f(0, 0);
+                        cameraX = 0;
+                        gameView.setCenter(windowWidth / 2, windowHeight / 2);
+                        gameRunning = true;
+                    }
+                    break;
                 }
             }
 
@@ -551,6 +606,33 @@ void Menu::handleInput(RenderWindow& window, Event& event)
                 sound.play();
                 currentState = MAIN_MENU;
             }
+        }
+    }
+    else if (currentState == GAME_PLAY)
+    {
+        // Control test player with arrow keys
+        if (event.type == Event::KeyPressed)
+        {
+            if (event.key.code == Keyboard::Left)
+                testPlayerVelocity.x = -testPlayerSpeed;
+            if (event.key.code == Keyboard::Right)
+                testPlayerVelocity.x = testPlayerSpeed;
+            if (event.key.code == Keyboard::Up)
+                testPlayerVelocity.y = -testPlayerSpeed;
+            if (event.key.code == Keyboard::Down)
+                testPlayerVelocity.y = testPlayerSpeed;
+            if (event.key.code == Keyboard::Escape)
+            {
+                currentState = LEVEL_SELECT;  // go back to level select
+                gameRunning = true;
+            }
+        }
+        if (event.type == Event::KeyReleased)
+        {
+            if (event.key.code == Keyboard::Left || event.key.code == Keyboard::Right)
+                testPlayerVelocity.x = 0;
+            if (event.key.code == Keyboard::Up || event.key.code == Keyboard::Down)
+                testPlayerVelocity.y = 0;
         }
     }
 }
@@ -606,5 +688,30 @@ void Menu::draw(RenderWindow& window)
 
         window.draw(levelBackButton);
         window.draw(levelBackText);
+    }
+    else if (currentState == GAME_PLAY)
+    {
+        // Draw first background (fixed) at world position (0,0)
+        window.draw(backgroundMain);
+
+        // Draw second background (scrolling), it moves with the player
+        // I need to draw it at  -cameraX (so it scrolls opposite to the camera movement)
+        
+        Sprite movingBg = backgroundOptions;
+        movingBg.setPosition(-cameraX, 0);
+        window.draw(movingBg);
+
+        // Draw a second copy to the right to avoid gaps
+        movingBg.setPosition(movingBg.getPosition().x + movingBg.getGlobalBounds().width, 0);
+        window.draw(movingBg);
+
+        // Set the game view (the caamera) to follow the player
+        window.setView(gameView);
+
+        // Draw the test player (its position is in world coordinates)
+        window.draw(testPlayer);
+
+        // Reset view to default for UI (if needed)
+        window.setView(window.getDefaultView());
     }
 }
